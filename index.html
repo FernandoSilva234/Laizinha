@@ -320,11 +320,15 @@
       }
       return null;
     }
+    // URLs definitivas (GitHub Pages)
+    const PUBLIC_URL = 'https://fernandosilva234.github.io/Laizinha/';
+    const PDF_URL = 'https://fernandosilva234.github.io/Laizinha/cartilha-viva.pdf';
+    const LOGO_URL = 'https://raw.githubusercontent.com/FernandoSilva234/Laizinha/Style/UNICESUMAR.jpg';
+
     function setQR(){
-      // URLs: pública (GitHub Pages) e PDF local no repositório
-      let digitalUrl = canonicalFromLocation() || location.href;
-      // Gera URL absoluta para o PDF na mesma pasta
-      let downloadUrl = new URL('cartilha-viva.pdf', location.href).toString();
+      // Página pública e PDF direto hospedados no GitHub Pages
+      let digitalUrl = PUBLIC_URL || canonicalFromLocation() || location.href;
+      let downloadUrl = PDF_URL;
       // Se ainda não há URL pública definida em ambiente local, usar placeholder visível/no-op
       const src1 = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(digitalUrl)}`;
       const src2 = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(downloadUrl)}`;
@@ -451,10 +455,10 @@
         const saved = store.get('logoDataUrl', null);
         if(saved){ logo.src = saved; logo.style.visibility='visible'; return; }
         const sources = [
-          './unicesumar.jpg','./unicesumar.jpeg','./unicesumar.png',
-          'unicesumar.jpg','unicesumar.jpeg','unicesumar.png',
-          './Unicesumar.jpg','./Unicesumar.jpeg','./Unicesumar.png',
-          'https://upload.wikimedia.org/wikipedia/commons/6/6c/Logo_Centro_Universit%C3%A1rio_de_Maring%C3%A1_-_UniCesumar.png'
+          LOGO_URL,
+          PUBLIC_URL + 'UNICESUMAR.jpg',
+          './UNICESUMAR.jpg','./unicesumar.jpg','./unicesumar.jpeg','./unicesumar.png',
+          'unicesumar.jpg','unicesumar.jpeg','unicesumar.png'
         ];
         const show = ()=>{ logo.style.visibility='visible'; };
         let idx = 0;
