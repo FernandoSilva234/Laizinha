@@ -40,19 +40,45 @@
     @media (max-width:920px){main{grid-template-columns:1fr}}
     .card{border:1px solid var(--line);background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
     .muted{color:var(--muted)}
+    .autor-nomes{color:var(--text);font-weight:400}
     h2{margin:0 0 10px}
     /* Tabs — texto sempre visível no escuro */
     .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
     .tab{border:2px solid var(--line);padding:10px 14px;border-radius:999px;background:var(--panel);cursor:pointer;font-weight:800;color:var(--text)}
     .tab[aria-selected="true"]{background:linear-gradient(135deg, var(--accent), var(--accent2)); border-color:transparent; color:#06121d; text-shadow:0 1px 0 rgba(255,255,255,.4)}
+    /* Cores específicas por aba */
+    .tabs .tab:nth-child(1){border-color:#0B66FF33}
+    .tabs .tab:nth-child(1)[aria-selected="true"]{background:#0B66FF;color:#ffffff;border-color:#0B66FF;text-shadow:none}
+    .tabs .tab:nth-child(2){border-color:#B9E4FF66}
+    .tabs .tab:nth-child(2)[aria-selected="true"]{background:#B9E4FF;color:#0b1224;border-color:#B9E4FF;text-shadow:none}
+    .tabs .tab:nth-child(3){border-color:#96F2C766}
+    .tabs .tab:nth-child(3)[aria-selected="true"]{background:#96F2C7;color:#0b1224;border-color:#96F2C7;text-shadow:none}
+    .tabs .tab:nth-child(4){border-color:#DCC8FF66}
+    .tabs .tab:nth-child(4)[aria-selected="true"]{background:#DCC8FF;color:#0b1224;border-color:#DCC8FF;text-shadow:none}
+    .tabs .tab:nth-child(5){border-color:#FFD1E866}
+    .tabs .tab:nth-child(5)[aria-selected="true"]{background:#FFD1E8;color:#0b1224;border-color:#FFD1E8;text-shadow:none}
     [data-tab]{display:none}
     [data-tab].active{display:block}
     /* Info chips */
     .chip{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-weight:700}
     .grid{display:grid;gap:10px}
-    .grid.cols-2{grid-template-columns:1fr 1fr}
+    .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr)); align-items:stretch; grid-auto-rows:auto}
+    /* garante cartões iguais em altura dentro de grids (desktop) */
+    .grid.cols-2 > .card{height:100%; display:flex; flex-direction:column}
     @media (max-width:720px){.grid.cols-2{grid-template-columns:1fr}}
+    /* Layout específico: em Hábitos, esquerda maior (2/3) e direita menor (1/3) */
+    #habitos .grid.cols-2{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+    /* evita overflow dos cartões e garante alinhamento às laterais do card pai */
+    #habitos .grid.cols-2 > .card{min-width:0}
     .ill{width:100%;max-width:520px;margin-inline:auto;border-radius:14px;border:1px solid var(--line)}
+    .icon{width:22px;height:22px;vertical-align:-3px;margin-right:6px}
+    .icon-img{width:22px;height:22px;vertical-align:-3px;margin-right:6px;object-fit:contain}
+    .icon-tea{width:28px;height:28px}
+    .icon-borderline{width:28px;height:28px}
+    /* Box breathing UI */
+    .phases{display:flex;gap:8px;align-items:center;justify-content:center}
+    .phase{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;border:1px solid var(--line);background:var(--panel);font-weight:800}
+    .phase.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06121d;border-color:transparent}
     /* Breathing circle */
     .breath{width:clamp(200px,55vw,320px);height:clamp(200px,55vw,320px);border-radius:50%;border:3px solid var(--accent);display:grid;place-items:center;margin:auto;opacity:.95;font-size:clamp(48px,8vw,96px)}
     .breath[data-active="true"]{animation:breathe 8s ease-in-out infinite}
@@ -100,12 +126,12 @@
         <div>
           <div class="title">Cartilha Viva — Obesidade & Saúde Mental</div>
           <div class="sub">Material educativo, acessível e sem estigma. <span class="muted">Não substitui orientação profissional.</span></div>
-          <div class="muted" id="autorHeader">Nome: Laize Lemes</div>
+          <div class="muted" id="autorHeader">Nome: <span class="autor-nomes">Laize Lemes, Andreia Cristina Specht, Luana Valença Lopes</span></div>
         </div>
       </div>
       <div class="actions" role="toolbar" aria-label="Preferências">
         <button id="toggle-theme" class="btn">🌓 Tema</button>
-        <button id="pdf" class="btn">⬇️ PDF</button>
+        <button id="openPdf" class="btn">📄 Abrir PDF</button>
       </div>
     </header>
 
@@ -123,10 +149,15 @@
         <div id="intro" data-tab class="active">
           <div class="grid cols-2">
             <div>
-              <h2>Por que esta cartilha?</h2>
-              <p>Obesidade é uma <b>DCNT multifatorial</b>. Além de alimentação e movimento, aspectos de <b>saúde mental</b> e do <b>neurodesenvolvimento</b> podem influenciar apetite, impulsividade, planejamento e autocuidado. Este material oferece <b>informação pública</b> em linguagem simples, para apoiar escolhas e incentivar acompanhamento multiprofissional.</p>
-              <div class="chip">🧭 Diretriz: educação em saúde • linguagem sem estigma</div>
-              <p class="muted">Metodologia: revisão narrativa em psicologia, nutrição, psiquiatria e saúde pública. Produto: cartilha com QR Code para acesso digital.</p>
+              <h2>Relação entre Obesidade e Transtornos Mentais</h2>
+              <p>A obesidade e diversos transtornos mentais apresentam uma relação de mão dupla. Pessoas com ansiedade, TDAH, TEA, esquizofrenia ou transtorno de personalidade borderline têm maior risco de desenvolver obesidade. Da mesma forma, quem já tem obesidade também tende a apresentar maior chance de desenvolver ou agravar condições de saúde mental, incluindo transtornos alimentares.</p>
+              <p>Essas associações ocorrem por fatores combinados:</p>
+              <ul>
+                <li><b>Psicossociais</b>: estigma, isolamento, baixa autoestima.</li>
+                <li><b>Biológicos</b>: inflamação, alterações hormonais, mudanças no cérebro.</li>
+                <li><b>Comportamentais</b>: compulsão alimentar, menor atividade física, impulsividade, dificuldades de organização, alterações sensoriais e padrões de sono.</li>
+              </ul>
+              <p>Entender essa relação é fundamental. O cuidado deve ser integral, considerando corpo e mente. Esta cartilha busca informar, reduzir estigmas e apoiar escolhas de saúde mais conscientes.</p>
             </div>
             <div>
               <lottie-player class="ill" src="https://assets10.lottiefiles.com/packages/lf20_tutvdkg0.json" background="transparent" speed="1" loop autoplay></lottie-player>
@@ -149,19 +180,64 @@
           <p class="muted">Informação <b>não diagnóstica</b>. Se identificar sinais, procure uma equipe (psicologia, nutrição, medicina, educação física).</p>
           <div class="grid cols-2">
             <div class="card">
-              <h3>🧠 TDAH</h3>
+              <h3>
+                <!-- TDAH: imagem PNG responsiva -->
+                <img class="icon-img" src="./TDAH.png" alt="Cérebro colorido representando TDAH" loading="lazy" decoding="async"/>
+                TDAH
+              </h3>
               <p>Impulsividade e dificuldade de organização podem afetar <b>planejamento de refeições</b> e constância em exercícios. Estratégias: rotinas curtas, alarmes e <b>passos de 5–10 minutos</b>.</p>
             </div>
             <div class="card">
-              <h3>🧩 TEA</h3>
+              <h3>
+                <!-- TEA: coração de quebra-cabeça multicolor -->
+                <svg class="icon icon-tea" viewBox="0 0 24 24" aria-hidden="true">
+                  <defs>
+                    <clipPath id="heartClip">
+                      <path d="M12 21s-6.2-4.2-8.6-8.1C1.9 9.2 3.7 6 6.3 6c1.9 0 3.4 1.1 3.9 2.2.5-1.1 2-2.2 3.9-2.2 2.6 0 4.4 3.2 2.9 6.9C18.2 16.8 12 21 12 21z"/>
+                    </clipPath>
+                  </defs>
+                  <!-- contorno sutil para evitar aparência de corte no topo -->
+                  <path d="M12 21s-6.2-4.2-8.6-8.1C1.9 9.2 3.7 6 6.3 6c1.9 0 3.4 1.1 3.9 2.2.5-1.1 2-2.2 3.9-2.2 2.6 0 4.4 3.2 2.9 6.9C18.2 16.8 12 21 12 21z" fill="none" stroke="#334155" stroke-opacity=".35" stroke-width="1"/>
+                  <!-- base branca para contraste -->
+                  <rect x="0" y="0" width="24" height="24" fill="#fff" clip-path="url(#heartClip)"/>
+                  <g clip-path="url(#heartClip)">
+                    <!-- blocos coloridos -->
+                    <rect x="2" y="7" width="10" height="7" fill="#f59e0b"/>
+                    <circle cx="12" cy="10.5" r="1.5" fill="#f59e0b"/>
+                    <rect x="12" y="7" width="10" height="7" fill="#2563eb"/>
+                    <circle cx="12" cy="10.5" r="1.5" fill="#2563eb" transform="translate(10,0)"/>
+                    <rect x="2" y="14" width="10" height="7" fill="#10b981"/>
+                    <circle cx="7" cy="14" r="1.5" fill="#10b981"/>
+                    <rect x="12" y="14" width="10" height="7" fill="#ef4444"/>
+                    <circle cx="17" cy="21" r="1.5" fill="#ef4444"/>
+                    <!-- linhas de divisória sutis -->
+                    <path d="M12 7v14M2 14h20" stroke="#1f2937" stroke-opacity=".18" stroke-width=".8"/>
+                  </g>
+                </svg>
+                TEA
+              </h3>
               <p>Preferências sensoriais e rotinas rígidas podem influenciar <b>variedade alimentar</b> e adesão. Estratégias: previsibilidade, quadros visuais e trocas graduais.</p>
             </div>
             <div class="card">
-              <h3>💜 Personalidade Borderline</h3>
+              <h3>
+                <img class="icon-img icon-borderline" src="./Bord.png" alt="Perfil com cérebro representando Personalidade Borderline" loading="lazy" decoding="async"/>
+                Personalidade Borderline
+              </h3>
               <p>Oscilações emocionais podem levar a <b>comer emocional</b>. Estratégias: técnicas de <b>regulação</b> (respiração, pausa) e planejamento de suporte.</p>
             </div>
             <div class="card">
-              <h3>🌿 Esquizofrenia</h3>
+              <h3>
+                <!-- Esquizofrenia: perfis sobrepostos coloridos -->
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <defs>
+                    <path id="head" d="M12 3c2.8 0 5 2.2 5 5v1c0 1.5-.9 2.8-2.3 3.4-.4.2-.7.6-.7 1.1V16h1.5c1.1 0 2 .9 2 2v3H8v-3c0-1.1.9-2 2-2h1.5v-2.5c0-.5-.3-.9-.7-1.1C9.4 11.8 8.5 10.5 8.5 9V8c0-2.8 2.2-5 5-5z"/>
+                  </defs>
+                  <use href="#head" fill="#f59e0b" opacity=".7" transform="translate(-3,1)"/>
+                  <use href="#head" fill="#a855f7" opacity=".7" transform="translate(2,0)"/>
+                  <use href="#head" fill="#38bdf8" opacity=".7" transform="translate(0,2)"/>
+                </svg>
+                Esquizofrenia
+              </h3>
               <p>Alguns antipsicóticos podem aumentar apetite e peso. Estratégias: acompanhamento nutricional, rotina de sono, caminhada leve e <b>suporte multiprofissional</b>.</p>
             </div>
           </div>
@@ -195,15 +271,15 @@
               <h3>✅ Rotina guiada</h3>
               <div class="grid">
                 <div class="card" style="padding:10px">
-                  <b>🧊 Aquecimento</b> — 2 min
+                  <b>🧊 Aquecimento</b> — <span class="dur" data-key="warmup">2</span> min
                   <div class="chip" style="margin-top:6px"><button class="btn start" data-min="2" data-label="Aquecimento">Iniciar</button><span class="muted" data-role="timer">00:00</span></div>
                 </div>
                 <div class="card" style="padding:10px">
-                  <b>🚶 Caminhada rápida</b> — 5 min
+                  <b>🚶 Caminhada rápida</b> — <span class="dur" data-key="walk">5</span> min
                   <div class="chip" style="margin-top:6px"><button class="btn start" data-min="5" data-label="Caminhada">Iniciar</button><span class="muted" data-role="timer">00:00</span></div>
                 </div>
                 <div class="card" style="padding:10px">
-                  <b>🧘 Alongamento</b> — 3 min
+                  <b>🧘 Alongamento</b> — <span class="dur" data-key="stretch">3</span> min
                   <div class="chip" style="margin-top:6px"><button class="btn start" data-min="3" data-label="Alongamento">Iniciar</button><span class="muted" data-role="timer">00:00</span></div>
                 </div>
               </div>
@@ -231,6 +307,16 @@
           <div class="breath" id="breath">🫁</div>
           <div class="actions" style="justify-content:center;margin-top:10px">
             <button class="btn" id="breathToggle">🧘 Iniciar</button>
+            <span class="muted" id="breathCooldown" style="margin-left:10px;display:none"></span>
+          </div>
+          <div id="boxUI" class="box-ui" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:10px">
+            <div class="phases" aria-label="Fases 4-4-4-4">
+              <span class="phase" data-i="0">4</span>
+              <span class="phase" data-i="1">4</span>
+              <span class="phase" data-i="2">4</span>
+              <span class="phase" data-i="3">4</span>
+            </div>
+            <div class="muted" id="boxStatus">Sessão 0/4</div>
           </div>
         </div>
 
@@ -253,11 +339,13 @@
       <!-- Coluna lateral: notas do projeto e crédito/QR -->
       <aside class="card">
         <h2>Sobre o projeto</h2>
-        <p>Cartilha informativa baseada em <b>revisão narrativa</b> (psicologia, nutrição, psiquiatria e saúde pública). Objetivo: ampliar a compreensão da obesidade de forma <b>interdisciplinar</b> e <b>sem estigma</b>, promovendo autocuidado e busca por acompanhamento multiprofissional.</p>
+        <p>Cartilha informativa elaborada com <b>base em conteúdos das áreas de</b> psicologia, nutrição, psiquiatria e saúde pública. O objetivo é explicar a obesidade de forma clara, interdisciplinar e sem estigma, incentivando o autocuidado e a busca por acompanhamento multiprofissional.</p>
         <hr style="border-color:var(--line);margin:12px 0"/>
         <h3>Créditos</h3>
-        <p class="muted">Autoria acadêmica (Psicologia): <span id="autor">Laize Lemes</span>. Desenvolvimento: página web interativa acessível.</p>
-        <div class="chip">📩 Contato institucional / Orientação</div>
+        <p class="muted">Autoria acadêmica (Psicologia): <span id="autor" class="autor-nomes">Laize Lemes, Andreia Cristina Specht, Luana Valença Lopes</span>.</p>
+        <p class="muted">Trabalho apresentado ao Curso de Graduação em Psicologia da UNICESUMAR Universidade Cesumar como requisito parcial para avaliação da AEP, 2º bimestre de 2025 (período noturno).</p>
+        <p class="muted">Desenvolvimento: página web interativa acessível.</p>
+        
         <hr style="border-color:var(--line);margin:12px 0"/>
         <h3>Relações mente-corpo</h3>
         <div class="qr">
@@ -282,7 +370,7 @@
       <div class="meta">
         <div>
           <div class="muted">Conteúdo para educação em saúde. Não substitui avaliação clínica. Dados locais (localStorage) e sem coleta de identificação.</div>
-          <div style="margin-top:6px">Autoria acadêmica (Psicologia): <b>Laize Lemes</b>.</div>
+          <div style="margin-top:6px">Autoria acadêmica (Psicologia): <span class="autor-nomes">Laize Lemes, Andreia Cristina Specht, Luana Valença Lopes</span>.</div>
         </div>
         <img id="printLogo" alt="Unicesumar" />
       </div>
@@ -365,6 +453,34 @@
       }
     }
 
+    // Rotina guiada — ajustar durações conforme meta
+    const routineBase = { warmup: 2, walk: 5, stretch: 3 }; // soma 10
+    function updateRoutineByGoal(){
+      const totalBase = routineBase.warmup + routineBase.walk + routineBase.stretch;
+      const goal = Number(state.goal) || totalBase;
+      const scale = goal / totalBase;
+      const keys=['warmup','walk','stretch'];
+      const rounded={}; let sum=0;
+      keys.forEach(k=>{ const v=Math.max(1, Math.round(routineBase[k]*scale)); rounded[k]=v; sum+=v; });
+      // Ajuste fino para bater a meta exatamente
+      let diff = goal - sum;
+      if(diff !== 0){
+        // Distribui o ajuste no último item mantendo mínimo de 1
+        rounded.stretch = Math.max(1, rounded.stretch + diff);
+      }
+      // Atualiza UI: textos e botões
+      keys.forEach(k=>{
+        const span = document.querySelector(`.dur[data-key="${k}"]`);
+        if(span){ span.textContent = rounded[k]; }
+      });
+      const bWarm = document.querySelector('button.start[data-label="Aquecimento"]');
+      const bWalk = document.querySelector('button.start[data-label="Caminhada"]');
+      const bStr  = document.querySelector('button.start[data-label="Alongamento"]');
+      if(bWarm){ bWarm.dataset.min = String(rounded.warmup); }
+      if(bWalk){ bWalk.dataset.min = String(rounded.walk); }
+      if(bStr){  bStr.dataset.min  = String(rounded.stretch); }
+    }
+
     // Timer simples
     const timers=$$('[data-role="timer"]').map(el=>({el,sec:0,id:null}));
     let current=null;
@@ -382,12 +498,86 @@
     }
 
     // Respiração
-    const breath=$('#breath'); $('#breathToggle').addEventListener('click',()=>{ const on=breath.getAttribute('data-active')==='true'; breath.setAttribute('data-active', on?'false':'true'); $('#breathToggle').textContent= on? '🧘 Iniciar' : '⏹️ Parar' });
+    // Respiração box 4-4-4-4: 1 sessão = 4x (inspirar 4s + expirar 4s), pausa 60s entre sessões, total 4 sessões
+    const breath=$('#breath');
+    let boxRunning=false, boxInterval=null, boxPhase=0/*0=inspira,1=expira*/, boxSecLeft=4, boxPairs=0, boxSession=1, cooldownId=null, cooldownLeft=0;
+    // Destaque dos 4 indicadores representa a SESSÃO atual (não a fase)
+    function setSessionActive(i){
+      $$('.phase').forEach(p=>p.classList.remove('active'));
+      const el=$(`.phase[data-i="${i}"]`); if(el) el.classList.add('active');
+    }
+    function fmtMMSS(s){ const m=String(Math.floor(s/60)).padStart(2,'0'); const ss=String(s%60).padStart(2,'0'); return `${m}:${ss}`; }
+    function updateBoxStatus(){ $('#boxStatus').textContent = `Sessão ${boxSession}/4`; }
+    function stopBox(reset=true){
+      if(boxInterval){ clearInterval(boxInterval); boxInterval=null; }
+      if(cooldownId){ clearInterval(cooldownId); cooldownId=null; $('#breathCooldown').style.display='none'; $('#breathCooldown').textContent=''; $('#breathToggle').disabled=false; }
+      boxRunning=false; breath.setAttribute('data-active','false'); $('#breathToggle').textContent='🧘 Iniciar';
+      if(reset){
+        boxPhase=0; boxSecLeft=4; boxPairs=0; boxSession=1; setSessionActive(-1); updateBoxStatus();
+      }
+    }
+    function startCooldown(){
+      cooldownLeft=60;
+      const cdEl = $('#breathCooldown');
+      cdEl.style.display='inline';
+      $('#breathToggle').disabled=true;
+      function tickCd(){
+        cdEl.textContent = `Pausa: ${fmtMMSS(cooldownLeft)}`;
+        if(cooldownLeft<=0){
+          clearInterval(cooldownId); cooldownId=null;
+          cdEl.style.display='none'; cdEl.textContent='';
+          // Próxima sessão ou fim
+          if(boxSession < 4){
+            boxSession++; boxPairs=0; updateBoxStatus();
+            $('#breathToggle').disabled=false;
+            startBox(true); // auto-início da próxima
+          }else{
+            $('#breathToggle').disabled=false;
+            stopBox(); // finaliza totalmente
+          }
+          return;
+        }
+        cooldownLeft--;
+      }
+      tickCd();
+      cooldownId=setInterval(tickCd,1000);
+    }
+    function tickBox(){
+      // Mantém o pulmão visível; indicador permanece na sessão atual
+      if(--boxSecLeft<=0){
+        boxPhase=(boxPhase+1)%2; // alterna inspira/expira
+        boxSecLeft=4;
+        if(boxPhase===0){ // terminou expirar -> completou 1 par (in+ex)
+          boxPairs++;
+          if(boxPairs>=4){
+            // sessão concluída
+            if(boxInterval){ clearInterval(boxInterval); boxInterval=null; }
+            boxRunning=false; breath.setAttribute('data-active','false'); $('#breathToggle').textContent='🧘 Iniciar';
+            startCooldown(); return;
+          }
+        }
+      }
+    }
+    function startBox(isAuto=false){
+      if(boxRunning) return;
+      boxRunning=true; boxPhase=0; boxSecLeft=4; setSessionActive(boxSession-1);
+      if(!isAuto){ boxSession=boxSession||1; } // mantém sessão se vindo do cooldown
+      updateBoxStatus();
+      breath.setAttribute('data-active','true'); $('#breathToggle').textContent='⏹️ Parar';
+      tickBox(); boxInterval=setInterval(tickBox,1000);
+    }
+    $('#breathToggle').addEventListener('click',()=>{
+      if(boxRunning){ stopBox(); return; }
+      if($('#breathToggle').disabled) return;
+      // início manual: reseta toda a série
+      boxSession=1; boxPairs=0; updateBoxStatus();
+      startBox();
+    });
 
     // Exportar JSON (se botão existir)
     { const btn=$('#export'); if(btn){ btn.addEventListener('click',()=>{ const data={goal:state.goal,minutes:state.minutes,history:state.history,exportedAt:new Date().toISOString()}; const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='cartilha-viva-dados.json'; a.click(); URL.revokeObjectURL(url) }); } }
-    // PDF: usa fluxo de impressão diretamente
-    $('#pdf').addEventListener('click',()=>window.print());
+    // Abrir PDF hospedado no repositório
+    { const btn=document.getElementById('openPdf'); if(btn){ btn.addEventListener('click',()=>{ window.open(PDF_URL,'_blank','noopener'); }); } }
     // Utilitário: comprimir imagem em dataURL JPEG
     async function compressImageToDataUrl(file, maxWidth=1200, quality=0.85){
       return new Promise((resolve,reject)=>{
@@ -448,7 +638,7 @@
     }); } }
 
     // Ajustes iniciais
-    (function init(){ applyTheme(); setQR(); state.goal=store.get('goal',10); $('#goalInput').value=state.goal; $('#goalInput').addEventListener('change',(e)=>{ state.goal=Math.max(5,Number(e.target.value||10)); store.set('goal',state.goal); updateRing()}); $('#celebrateDemo').addEventListener('click',celebrate); updateRing();
+    (function init(){ applyTheme(); setQR(); state.goal=store.get('goal',10); $('#goalInput').value=state.goal; $('#goalInput').addEventListener('change',(e)=>{ state.goal=Math.max(5,Number(e.target.value||10)); store.set('goal',state.goal); updateRing(); updateRoutineByGoal() }); $('#celebrateDemo').addEventListener('click',celebrate); updateRing(); updateRoutineByGoal();
       // Carrega logo Unicesumar e faz fallback visual
       const logo = document.getElementById('uniLogo');
       function applyLogo(){
